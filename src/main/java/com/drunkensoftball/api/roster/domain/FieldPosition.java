@@ -6,15 +6,15 @@ public enum FieldPosition {
     first_base(1),
     second_base(2),
     third_base(3),
-    short_stop(5),
-    pitcher(4),
-    left_field(6),
-    centerfield(7),
-    right_field(8),
+    short_stop(4),
+    pitcher(5),
+    infield(9),
     outfield(10),
-    left_centerfield(11),
-    right_centerfield(12),
-    infield(20),
+    left_field(11),
+    left_centerfield(12),
+    centerfield(13),
+    right_centerfield(14),
+    right_field(15),
     rover(30);
 
     public int id;

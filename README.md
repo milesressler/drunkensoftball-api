@@ -20,7 +20,7 @@ Access token for other requests - not currently recoverable
 
 
 # Create Team
-Creates a new team with the provided name.  The user on auth token will be set as team manager and automatically added to the roster.
+Creates a new team with the provided name.  The user on auth token will be set as team manager and automatically added to the rosterEntry.
 
 POST /team
 Header: Authorization={UUID from create user}

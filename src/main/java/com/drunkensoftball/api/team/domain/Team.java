@@ -2,7 +2,7 @@ package com.drunkensoftball.api.team.domain;
 
 
 import com.drunkensoftball.api.domain.BaseEntity;
-import com.drunkensoftball.api.roster.domain.Roster;
+import com.drunkensoftball.api.roster.domain.RosterEntry;
 import com.drunkensoftball.api.user.domain.User;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -22,7 +22,7 @@ public class Team extends BaseEntity{
     private User manager;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<Roster> players;
+    private List<RosterEntry> players;
 
     public String getName() {
         return name;
@@ -40,11 +40,11 @@ public class Team extends BaseEntity{
         this.manager = manager;
     }
 
-    public List<Roster> getPlayers() {
+    public List<RosterEntry> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Roster> players) {
+    public void setPlayers(List<RosterEntry> players) {
         this.players = players;
     }
 

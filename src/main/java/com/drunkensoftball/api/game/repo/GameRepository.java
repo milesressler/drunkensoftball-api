@@ -10,5 +10,6 @@ import java.util.List;
 public interface GameRepository extends JpaRepository<Game, Long> {
 
     Game findByTeamId(Long id);
+    Game findByUuid(String uuid);
 
 }

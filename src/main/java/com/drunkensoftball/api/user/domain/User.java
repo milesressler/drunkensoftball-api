@@ -1,7 +1,7 @@
 package com.drunkensoftball.api.user.domain;
 
 import com.drunkensoftball.api.domain.BaseEntity;
-import com.drunkensoftball.api.roster.domain.Roster;
+import com.drunkensoftball.api.roster.domain.RosterEntry;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     private Boolean inviteSent;
 
     @OneToMany(mappedBy = "user")
-    private List<Roster> teams;
+    private List<RosterEntry> teams;
 
 //    @ManyToMany(mappedBy = "players")
 //    private List<Team> teams;
@@ -73,7 +73,7 @@ public class User extends BaseEntity {
         this.inviteSent = inviteSent;
     }
 
-    public List<Roster> getTeams() {
+    public List<RosterEntry> getTeams() {
         return teams;
     }
 

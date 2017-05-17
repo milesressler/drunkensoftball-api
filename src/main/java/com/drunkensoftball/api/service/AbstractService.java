@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.service;
 
 import com.drunkensoftball.api.auth.repo.AuthenticationRepository;
+import com.drunkensoftball.api.exception.NotFoundException;
 import com.drunkensoftball.api.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +12,7 @@ public abstract class AbstractService {
 
     public <T> T mustExist(T o){
         if (o == null){
-            throw new RuntimeException("NPE");
+            throw new NotFoundException("Can't find entity");
         } else {
             return o;
         }

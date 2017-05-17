@@ -9,4 +9,9 @@ public interface AuthenticationService {
 
     Authentication createToken(User user);
 
+    Authentication googleAuthentication(String googleToken);
+
+    Authentication basicAuthentication(String user, String password);
+
+
 }

@@ -3,12 +3,14 @@ package com.drunkensoftball.api.roster.domain;
 import com.drunkensoftball.api.domain.BaseEntity;
 import com.drunkensoftball.api.team.domain.Team;
 import com.drunkensoftball.api.user.domain.User;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "roster")
-public class Roster extends BaseEntity {
+@JsonSerialize(using = RosterSerializer.class)
+public class RosterEntry extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user", nullable = false)

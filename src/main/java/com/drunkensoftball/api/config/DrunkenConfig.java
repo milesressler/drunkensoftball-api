@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = {"com.drunkensoftball.api"})
-@PropertySource(value = "classpath:drunken-softball-application.properties")
+@PropertySource(value = {"classpath:drunken-softball-application.properties", "classpath:drunken-softball-datasource.properties"})
 @EnableAutoConfiguration
 public class DrunkenConfig {
 

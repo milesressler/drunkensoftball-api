@@ -1,7 +1,7 @@
 package com.drunkensoftball.api.team.service;
 
 import com.drunkensoftball.api.auth.repo.AuthenticationRepository;
-import com.drunkensoftball.api.roster.domain.Roster;
+import com.drunkensoftball.api.roster.domain.RosterEntry;
 import com.drunkensoftball.api.service.AbstractService;
 import com.drunkensoftball.api.team.domain.Team;
 import com.drunkensoftball.api.team.repo.TeamRepository;
@@ -26,17 +26,17 @@ public class DefaultTeamService extends AbstractService implements TeamService {
     public Team createTeam(final String token,
                            final String name) {
 
-        final User user = mustExist(authenticationRepository.findByToken(token).getUser());
+        final User user = mustExist(authenticationRepository.findByToken(token)).getUser();
         final Team team = new Team();
         team.setName(name);
         team.setManager(user);
 
-        final Roster roster =  new Roster();
-        roster.setTeam(team);
-        roster.setUser(user);
+        final RosterEntry rosterEntry =  new RosterEntry();
+        rosterEntry.setTeam(team);
+        rosterEntry.setUser(user);
 
-        final List<Roster> playerList = new LinkedList<Roster>();
-        playerList.add(roster);
+        final List<RosterEntry> playerList = new LinkedList<RosterEntry>();
+        playerList.add(rosterEntry);
         team.setPlayers(playerList);
 
         return teamRepository.save(team);
@@ -46,7 +46,7 @@ public class DefaultTeamService extends AbstractService implements TeamService {
     public List<Team> getTeams(final String token,
                                final Pageable pageable) {
 
-        final User manager = mustExist(authenticationRepository.findByToken(token).getUser());
+        final User manager = mustExist(authenticationRepository.findByToken(token)).getUser();
         return teamRepository.findByManagerId(manager.getId(), pageable);
     }
 
@@ -54,7 +54,7 @@ public class DefaultTeamService extends AbstractService implements TeamService {
     public Team getTeam(final String token,
                         final String teamUuid) {
 
-        final User manager = mustExist(authenticationRepository.findByToken(token).getUser());
+        final User manager = mustExist(authenticationRepository.findByToken(token)).getUser();
         return mustExist(teamRepository.findByUuidAndManagerId(teamUuid, manager.getId()));
     }
 }

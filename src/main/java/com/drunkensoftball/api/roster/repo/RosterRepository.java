@@ -1,17 +1,16 @@
 package com.drunkensoftball.api.roster.repo;
 
-import com.drunkensoftball.api.roster.domain.Roster;
-import com.drunkensoftball.api.team.domain.Team;
+import com.drunkensoftball.api.roster.domain.RosterEntry;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface RosterRepository extends JpaRepository<Roster, Long> {
+public interface RosterRepository extends JpaRepository<RosterEntry, Long> {
 
-    Roster findByUuid(String uuid);
+    RosterEntry findByUuid(String uuid);
 
-    List<Roster> findByTeamId(Long teamId, Pageable pageable);
-    List<Roster> findByUserId(Long userId, Pageable pageable);
+    List<RosterEntry> findByTeamId(Long teamId, Pageable pageable);
+    List<RosterEntry> findByUserId(Long userId, Pageable pageable);
 
 }

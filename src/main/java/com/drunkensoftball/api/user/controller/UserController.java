@@ -6,6 +6,7 @@ import com.drunkensoftball.api.user.domain.User;
 import com.drunkensoftball.api.user.domain.UserRequest;
 import com.drunkensoftball.api.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +23,7 @@ public class UserController {
 
     private static final String URL_USER = "/user";
 
-    @RequestMapping(value = URL_USER, method = RequestMethod.POST)
+    @RequestMapping(value = URL_USER, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public String createUser(@RequestBody final UserRequest userRequest) {
 
         final User user = userService.createUser(userRequest.getUsername(), null, userRequest.getEmail());
@@ -30,6 +31,11 @@ public class UserController {
         final AuthenticationType authenticationType = AuthenticationType.getByString(userRequest.getAuthenticationType());
         return authenticationService.createToken(user).getToken();
     }
+
+//    @RequestMapping(value = URL_USER, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public User getUser() {
+//        return userServic
+//    }
 
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
