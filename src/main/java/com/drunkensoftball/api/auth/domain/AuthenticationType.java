@@ -3,7 +3,6 @@ package com.drunkensoftball.api.auth.domain;
 public enum AuthenticationType {
 
     password(0),
-    facebook(1),
     google(2);
 
     public int id;

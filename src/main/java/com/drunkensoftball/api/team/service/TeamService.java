@@ -18,4 +18,7 @@ public interface TeamService {
 
     Team getTeam(@NotBlank(message = "Authentication token required") String token,
                  @NotBlank(message = "Team uuid required") String teamUuid);
+
+    void deleteTeam(@NotBlank(message = "Authentication token required") String token,
+                    @NotBlank(message = "Team uuid required") String teamUuid);
 }

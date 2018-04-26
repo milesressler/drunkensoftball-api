@@ -10,7 +10,10 @@ public interface RosterRepository extends JpaRepository<RosterEntry, Long> {
 
     RosterEntry findByUuid(String uuid);
 
+    List<RosterEntry> findByTeamId(Long teamId);
     List<RosterEntry> findByTeamId(Long teamId, Pageable pageable);
+    List<RosterEntry> findByUserId(Long userId);
     List<RosterEntry> findByUserId(Long userId, Pageable pageable);
+
 
 }

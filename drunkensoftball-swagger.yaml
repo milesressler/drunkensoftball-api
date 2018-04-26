@@ -1,0 +1,70 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  description: |
+    API documentation for Drunken Softball
+  title: Drunken Softball API
+  contact:
+    email: miles.ressler@gmail.com
+host: drunkensoftball.miles-smiles.us
+basePath: /
+schemes:
+  - https
+tags:
+  - name: USER
+    description: Operations for user and user authentication
+paths:
+  /user:
+    post:
+      tags:
+        - USER
+      summary: Create User
+      description: >
+        Creates a new user and returns the associated auth token for subsequent requests
+      operationId: createUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Registration data
+          required: true
+          schema:
+            $ref: '#/definitions/CreateUserRequest'
+      responses:
+        '200':
+          description: >-
+          schema:
+            $ref: '#/definitions/CreateUserResponse'
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  CreateUserRequest:
+    type: object
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      authenticationType:
+        type: string
+        enum: [password, google]
+  CreateUserResponse:
+    type: object
+    properties:
+      recoveryCode:
+        type: string
+        example: 99998888-7777-6666-5555-111122223333
+
+
+
+
+
+

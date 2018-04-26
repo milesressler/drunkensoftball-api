@@ -9,10 +9,6 @@ import java.io.IOException;
 
 public class TeamSerializer extends BaseEntitySerializer<Team> {
 
-    private static final String NAME = "name";
-    private static final String MANAGER = "manager";
-    private static final String ROSTER = "roster";
-
     @Override
     public void serialize(final Team team,
                           final JsonGenerator jsonGenerator,
@@ -23,11 +19,19 @@ public class TeamSerializer extends BaseEntitySerializer<Team> {
         // Start User
         writeAbstractEntityFields(team, jsonGenerator);
         jsonGenerator.writeStringField(NAME, team.getName());
-        jsonGenerator.writeObjectField(MANAGER, team.getManager());
+
+
+
+        jsonGenerator.writeObjectFieldStart(MANAGER);
+        writeAbstractEntityFields(team.getManager(), jsonGenerator);
+        jsonGenerator.writeEndObject();
+
         if (team.getPlayers() != null){
             jsonGenerator.writeArrayFieldStart(ROSTER);
             for (final RosterEntry rosterEntry : team.getPlayers()){
-                jsonGenerator.writeObject(rosterEntry);
+                writeAbstractEntityFields(rosterEntry, jsonGenerator);
+                jsonGenerator.writeNumberField(FIELD_POSITION, rosterEntry.getFieldPosition().id);
+                jsonGenerator.writeNumberField(BATTING_POSITION, rosterEntry.getBattingPosition());
             }
             jsonGenerator.writeEndArray();
         }

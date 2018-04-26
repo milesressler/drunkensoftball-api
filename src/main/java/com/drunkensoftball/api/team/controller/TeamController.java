@@ -1,6 +1,5 @@
 package com.drunkensoftball.api.team.controller;
 
-import com.drunkensoftball.api.roster.domain.RosterRequest;
 import com.drunkensoftball.api.team.domain.Team;
 import com.drunkensoftball.api.team.domain.TeamRequest;
 import com.drunkensoftball.api.team.service.TeamService;
@@ -19,9 +18,9 @@ public class TeamController {
     private static final String URL_TEAM = "/team";
 
     @RequestMapping(value = URL_TEAM, method = RequestMethod.POST)
-    public String createTeam(@RequestBody final TeamRequest teamRequest, @RequestHeader(name = "Authorization") final String token){
+    public Team createTeam(@RequestBody final TeamRequest teamRequest, @RequestHeader(name = "Authorization") final String token){
 
-        return teamService.createTeam(token, teamRequest.getName()).getUuid();
+        return teamService.createTeam(token, teamRequest.getName());
 
     }
     @RequestMapping(value = URL_TEAM, method = RequestMethod.GET)
@@ -34,6 +33,11 @@ public class TeamController {
     public Team getTeam(@RequestHeader(name = "Authorization") final String token, @PathVariable(value = "uuid") final String teamUuid){
 
         return teamService.getTeam(token, teamUuid);
+    }
+
+    @RequestMapping(value = URL_TEAM + "/{uuid}", method = RequestMethod.DELETE)
+    public void deleteTeam(@RequestHeader(name = "Authorization") final String token, @PathVariable(value = "uuid") final String teamUuid){
+        teamService.deleteTeam(token, teamUuid);
     }
 
 
