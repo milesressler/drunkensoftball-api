@@ -15,9 +15,8 @@ gradle/
 *.war
 *.ear
 
-*drunken-softball-application.properties
+*drunken-softball-datasource.properties
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-drunken-softball-datasource.properties
