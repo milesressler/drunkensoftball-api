@@ -111,6 +111,26 @@ paths:
             $ref: '#/definitions/TeamResponse'
       security:
         - api_key: []
+    get:
+      tags:
+        - TEAM
+      summary: Get teams
+      description: >
+              Get all owned teams
+      operationId: getTeams
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: >-
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TeamResponse'
+      security:
+        - api_key: []
   /team/{uuid}:
     get:
       tags:
