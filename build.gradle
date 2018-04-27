@@ -37,14 +37,15 @@ jar {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:${SPRING_BOOT_VERSION}",
-            'org.springframework.boot:spring-boot-starter-tomcat',
-            "org.mariadb.jdbc:mariadb-java-client:2.2.3",
+            "org.springframework.boot:spring-boot-starter-tomcat:${SPRING_BOOT_VERSION}",
+            "org.springframework.boot:spring-boot-starter-security:${SPRING_BOOT_VERSION}",
             "org.springframework.boot:spring-boot-starter-data-jpa:${SPRING_BOOT_VERSION}",
+            "org.mariadb.jdbc:mariadb-java-client:2.2.3",
             "org.apache.commons:commons-lang3:3.7",
             'com.google.api-client:google-api-client:1.23.0',
             "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     testCompile  "junit:junit",
-                "org.springframework.boot:spring-boot-starter-test"
+                "org.springframework.boot:spring-boot-starter-test:${SPRING_BOOT_VERSION}"
 }
 
 task wrapper(type: Wrapper) {

@@ -6,10 +6,10 @@ info:
   title: Drunken Softball API
   contact:
     email: miles.ressler@gmail.com
-host: drunkensoftball.miles-smiles.us
+host: api.drunkensoftball.miles-smiles.us
 basePath: /
 schemes:
-  - https
+  - http
 tags:
   - name: USER
     description: Operations for user and user authentication
@@ -18,10 +18,10 @@ paths:
     post:
       tags:
         - USER
-      summary: Create User
+      summary: Register a new user account
       description: >
-        Creates a new user and returns the associated auth token for subsequent requests
-      operationId: createUser
+              Creates a new user account with a username and password.  This should be the first endpoint for a new user
+      operationId: registerUser
       consumes:
         - application/json
       produces:
@@ -37,31 +37,219 @@ paths:
         '200':
           description: >-
           schema:
-            $ref: '#/definitions/CreateUserResponse'
+            $ref: '#/definitions/AuthenticationResponse'
+  /auth/basic:
+    post:
+      tags:
+        - USER
+      summary: Login (Basic)
+      description: >
+              Generates a token authenticated user with username or email and password
+      operationId: loginUserBasic
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Login credentials
+          required: true
+          schema:
+            $ref: '#/definitions/AuthenticationRequest'
+      responses:
+        '200':
+          description: >-
+            Authenticated user and token returned
+          schema:
+            $ref: '#/definitions/AuthenticationResponse'
+  /auth/google:
+    post:
+      tags:
+        - USER
+      summary: Login (Google)
+      description: >
+              Generates a token, and user if not existing, with Google JWT
+      operationId: loginUserGoogle
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+          description: Google JWT
+      responses:
+        '200':
+          description: >-
+            Authenticated user and token returned
+          schema:
+            $ref: '#/definitions/AuthenticationResponse'
+  /team:
+    post:
+      tags:
+        - TEAM
+      summary: Create team
+      description: >
+              Creates a new team
+      operationId: createTeam
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Team data
+          required: true
+          schema:
+            $ref: '#/definitions/CreateTeamRequest'
+      responses:
+        '200':
+          description: >-
+          schema:
+            $ref: '#/definitions/TeamResponse'
+      security:
+        - api_key: []
+  /team/{uuid}:
+    get:
+      tags:
+        - TEAM
+      summary: Get team
+      description: >
+              Get team by uuid
+      operationId: getTeam
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: Team UUID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: >-
+          schema:
+            $ref: '#/definitions/TeamResponse'
+      security:
+        - api_key: []
 securityDefinitions:
   api_key:
     type: apiKey
     name: Authorization
     in: header
 definitions:
+  CreateTeamRequest:
+    type: object
+    properties:
+      name:
+        type: string
   CreateUserRequest:
     type: object
     properties:
-      username:
-        type: string
       email:
         type: string
       password:
         type: string
-      authenticationType:
+      username:
         type: string
-        enum: [password, google]
-  CreateUserResponse:
+      firstName:
+        type: string
+      lastName:
+        type: string
+  AuthenticationRequest:
     type: object
     properties:
-      recoveryCode:
+      user:
+        type: string
+      password:
+        type: string
+  UserResponse:
+    type: object
+    properties:
+      uuid:
         type: string
         example: 99998888-7777-6666-5555-111122223333
+      created:
+        type: number
+        description: timestamp in milliseconds
+      updated:
+        type: number
+        description: timestamp in milliseconds
+      firstName:
+        type: string
+      lastName:
+        type: string
+      displayName:
+        type: string
+        description: concatenated first and last name, or else username if those are empty
+      email:
+        type: string
+  AuthenticationResponse:
+    type: object
+    properties:
+      token:
+        type: string
+        example: 99998888-7777-6666-5555-111122223333
+      user:
+        $ref: '#/definitions/UserResponse'
+  TeamResponse:
+    type: object
+    properties:
+      uuid:
+        type: string
+        example: 99998888-7777-6666-5555-111122223333
+      created:
+        type: number
+        description: timestamp in milliseconds
+      updated:
+        type: number
+        description: timestamp in milliseconds
+      name:
+        type: string
+      manager:
+        $ref: '#/definitions/UserResponse'
+      roster:
+        type: array
+        items:
+          $ref: '#/definitions/RosterEntry'
+  RosterEntry:
+    type: object
+    properties:
+      uuid:
+        type: string
+        example: 99998888-7777-6666-5555-111122223333
+      created:
+        type: number
+        description: timestamp in milliseconds
+      updated:
+        type: number
+        description: timestamp in milliseconds
+      fieldPosition:
+        type: string
+        enum:
+          - catcher
+          - first_base
+          - second_base
+          - short_stop
+          - pitcher
+          - infield
+          - outfield
+          - left_field
+          - left_centerfield
+          - centerfield
+          - right_centerfield
+          - right_field
+          - rover
+      battingPosition:
+        type: number
+      user:
+        $ref: '#/definitions/UserResponse'
+
+
 
 
 

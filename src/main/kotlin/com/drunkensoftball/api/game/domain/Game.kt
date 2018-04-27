@@ -1,0 +1,21 @@
+package com.drunkensoftball.api.game.domain
+
+
+import com.drunkensoftball.api.domain.BaseEntity
+import com.drunkensoftball.api.team.domain.Team
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+
+import javax.persistence.Entity
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.Table
+
+@Entity
+@Table(name = "game")
+//@JsonSerialize(using = GameSerializer.class)
+class Game : BaseEntity() {
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "team")
+    var team: Team? = null
+}
