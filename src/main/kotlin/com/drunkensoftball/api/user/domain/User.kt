@@ -24,7 +24,7 @@ class User : BaseEntity() {
     @Column(name = "first_name")
     var firstName: String? = null
 
-    @Column(name = "fast_name")
+    @Column(name = "last_name")
     var lastName: String? = null
 
     @Column(name = "verified", nullable = false)

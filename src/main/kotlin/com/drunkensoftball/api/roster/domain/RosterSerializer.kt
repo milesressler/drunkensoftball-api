@@ -20,7 +20,7 @@ class RosterSerializer : BaseEntitySerializer<RosterEntry>() {
         // Start User
         writeAbstractEntityFields(entity, jsonGenerator)
 
-        jsonGenerator.writeObjectField(BaseEntitySerializer.FIELD_POSITION, entity.fieldPosition?.id)
+        jsonGenerator.writeObjectField(BaseEntitySerializer.FIELD_POSITION, entity.fieldPosition?.name)
         jsonGenerator.writeObjectField(BaseEntitySerializer.BATTING_POSITION, entity.battingPosition)
 
         jsonGenerator.writeObjectFieldStart(BaseEntitySerializer.USER)

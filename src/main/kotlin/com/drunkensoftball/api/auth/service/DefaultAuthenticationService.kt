@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service
 
 import java.io.IOException
 import java.security.GeneralSecurityException
+import java.security.SecureRandom
 import java.util.Arrays
-import java.util.UUID
 import javax.transaction.Transactional
 
 @Service
@@ -41,6 +41,8 @@ open class DefaultAuthenticationService : AuthenticationService {
 
     @Autowired
     lateinit var userRepository: UserRepository
+
+    private val rnd = SecureRandom()
 
 
     private val logger = LoggerFactory.getLogger(DefaultAuthenticationService::class.java)
@@ -65,7 +67,7 @@ open class DefaultAuthenticationService : AuthenticationService {
             throw NotFoundException("User not found")
         } else {
             val authentication = AuthenticationEntity()
-            authentication.token = UUID.randomUUID().toString()
+            authentication.token = createToken()
             authentication.user = userEntity
             return authenticationRepository.save(authentication)
         }
@@ -94,9 +96,17 @@ open class DefaultAuthenticationService : AuthenticationService {
         basicAuthenticationRepository.save(basicAuthentication)
 
         val authentication = AuthenticationEntity()
-        authentication.token = UUID.randomUUID().toString()
+        authentication.token = createToken()
         authentication.user = user
         return authenticationRepository.save(authentication)
+    }
+
+    private fun createToken(len: Int = 64): String {
+        val sb = StringBuilder(len)
+        repeat(len, {
+            sb.append(ALLOWED_CHARS[rnd.nextInt(ALLOWED_CHARS.length)])
+        })
+        return sb.toString()
     }
 
     private fun hashPassword(password: String): String {
@@ -132,7 +142,7 @@ open class DefaultAuthenticationService : AuthenticationService {
             }).user
 
             val authentication = AuthenticationEntity()
-            authentication.token = UUID.randomUUID().toString()
+            authentication.token = createToken()
             authentication.user = user!!
             return authenticationRepository.save(authentication)
         }
@@ -169,8 +179,9 @@ open class DefaultAuthenticationService : AuthenticationService {
     }
 
     companion object {
-        private val CLIENT_ID_WEB = "301730243353-crulut0j7kem5kdpb9jq9t8prndlknh2.apps.googleusercontent.com"
-        private val CLIENT_ID_IOS = "301730243353-599r4n4l693ld8rtm8s9b2hh4qpnjihf.apps.googleusercontent.com"
-        private val INVALID_LOGIN_CREDENTIALS = "Invalid user or password."
+        private const val CLIENT_ID_WEB = "301730243353-crulut0j7kem5kdpb9jq9t8prndlknh2.apps.googleusercontent.com"
+        private const val CLIENT_ID_IOS = "301730243353-599r4n4l693ld8rtm8s9b2hh4qpnjihf.apps.googleusercontent.com"
+        private const val INVALID_LOGIN_CREDENTIALS = "Invalid user or password."
+        private const val ALLOWED_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     }
 }

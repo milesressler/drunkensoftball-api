@@ -4,10 +4,12 @@ package com.drunkensoftball.api.user.controller
 import com.drunkensoftball.api.auth.domain.AuthenticationEntity
 import com.drunkensoftball.api.auth.service.AuthenticationService
 import com.drunkensoftball.api.exception.RequestValidationException
+import com.drunkensoftball.api.user.domain.User
 import com.drunkensoftball.api.user.domain.UserRequest
 import com.drunkensoftball.api.user.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.validation.Errors
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -24,6 +26,11 @@ class UserController {
     @Autowired
     lateinit var authenticationService: AuthenticationService
 
+    @RequestMapping(value = [URL_USER], method = [(RequestMethod.GET)], produces = [(MediaType.APPLICATION_JSON_VALUE)])
+    fun getUser(@AuthenticationPrincipal user: User): User {
+        return user
+    }
+
     @RequestMapping(value = [URL_USER], method = [(RequestMethod.POST)], produces = [(MediaType.APPLICATION_JSON_VALUE)])
     fun createUser(@Valid @RequestBody userRequest: UserRequest,
                    errors: Errors): AuthenticationEntity {
@@ -37,7 +44,6 @@ class UserController {
     }
 
     companion object {
-
         private const val URL_USER = "/user"
     }
 

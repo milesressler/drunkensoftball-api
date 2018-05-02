@@ -1,39 +1,5 @@
 # drunkensoftball
 
-# Add Player to Team Roster
-Adds a new players to the team roster.  New user will be created using the provided display name, but no token will be generated, so user can't login, but is usable by the manager
-
-Field position can be one of:
-
-catcher(0),
-first_base(1),
-second_base(2),
-third_base(3),
-short_stop(5),
-pitcher(4),
-left_field(6),
-centerfield(7),
-right_field(8),
-outfield(10),
-left_centerfield(11),
-right_centerfield(12),
-infield(20),
-rover(30);
-
-POST /rosterEntry
-Header: Authorization={UUID from create user}
-
-{
-"teamUuid":"a93d20ba-b798-40e0-b004-6a89c13107bf",
-"displayName":"Malone",
-"battingPosition":4,
-"fieldPosition":"pitcher"
-}
-
-Returns HTTP 200, and UUID of rosterEntry entry
-
-
-
 
 # Create Game
 Creates a new game with the provided team.

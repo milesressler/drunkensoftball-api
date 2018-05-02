@@ -1,14 +1,13 @@
 package com.drunkensoftball.api.roster.service
 
 
-import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.roster.domain.FieldPosition
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.roster.repo.RosterRepository
 import com.drunkensoftball.api.service.AbstractService
 import com.drunkensoftball.api.team.repo.TeamRepository
 import com.drunkensoftball.api.user.domain.User
-import com.drunkensoftball.api.user.service.UserService
+import com.drunkensoftball.api.user.repo.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -23,9 +22,9 @@ class DefaultRosterService : AbstractService(), RosterService {
     lateinit var teamRepository: TeamRepository
 
     @Autowired
-    lateinit var userService: UserService
+    lateinit var userRepository: UserRepository
 
-    override fun addPlayerByUuid(authentication: DSAuthentication,
+    override fun addPlayerByUuid(user: User,
                                  teamUuid: String,
                                  playerUuid: String,
                                  battingPosition: Int?,
@@ -33,17 +32,21 @@ class DefaultRosterService : AbstractService(), RosterService {
         return RosterEntry()
     }
 
-    override fun addGuestPlayer(authentication: DSAuthentication,
+    override fun addGuestPlayer(user: User,
                        teamUuid: String,
                        firstName: String,
                        lastName: String?,
                        battingPosition: Int?,
                        fieldPositionString: String?): RosterEntry {
 
-        val user = authentication.authenticationEntity?.user
-        val team = teamRepository.findByUuidAndManagerId(teamUuid, user?.id)
-        //        final User guestPlayer = userService.createUser(StringUtils.delete(UUID.randomUUID().toString(), "-" ), displayName, null);
-        val guestPlayer: User? = null
+        val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
+
+        var guestPlayer = User()
+        guestPlayer.firstName = firstName
+        guestPlayer.lastName = lastName
+        guestPlayer.username = "${firstName.toLowerCase()}.${lastName?.toLowerCase() ?: ""}${System.currentTimeMillis() / 1000}"
+        guestPlayer.verified = false
+        guestPlayer = userRepository.save(guestPlayer)
 
         val rosterEntry = RosterEntry()
         rosterEntry.team = team

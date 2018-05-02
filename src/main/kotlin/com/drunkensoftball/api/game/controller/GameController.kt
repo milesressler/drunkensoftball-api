@@ -18,7 +18,6 @@ class GameController {
 
     @RequestMapping(value = [URL_GAME], method = [POST])
     fun createGame(@AuthenticationPrincipal authentication: DSAuthentication, @RequestBody gameRequest: GameRequest): Game {
-
         return gameService.createGame(authentication, gameRequest.teamUuid)
     }
 

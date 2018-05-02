@@ -13,6 +13,10 @@ schemes:
 tags:
   - name: USER
     description: Operations for user and user authentication
+  - name: TEAM
+    description: Operations for team
+  - name: ROSTER
+    description: Operations for roster management
 paths:
   /user:
     post:
@@ -38,6 +42,25 @@ paths:
           description: >-
           schema:
             $ref: '#/definitions/AuthenticationResponse'
+    get:
+      tags:
+        - USER
+      summary: Get user
+      description: >
+              Gets basic user info
+      operationId: getUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: >-
+          schema:
+            $ref: '#/definitions/UserResponse'
+      security:
+        - api_key: []
+
   /auth/basic:
     post:
       tags:
@@ -208,12 +231,47 @@ paths:
           description: Successfully removed
       security:
         - api_key: []
+  /roster:
+    post:
+      tags:
+        - ROSTER
+      summary: Add to roster
+      description: >
+              Creates a new user and adds them to the roster. No token will be generated, so user can't login unless manager shares a validation code so that account can be claimed
+      operationId: addNewToRoster
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Roster data
+          required: true
+          schema:
+            $ref: '#/definitions/RosterEntryRequest'
+      responses:
+        '200':
+          description: >-
+            Roster entry returned
+          schema:
+            $ref: '#/definitions/RosterEntryResponse'
 securityDefinitions:
   api_key:
     type: apiKey
     name: Authorization
     in: header
 definitions:
+  BaseObject:
+    type: object
+    properties:
+      uuid:
+        type: string
+        example: 99998888-7777-6666-5555-111122223333
+      created:
+        type: number
+        description: timestamp in milliseconds
+      updated:
+        type: number
+        description: timestamp in milliseconds
   TeamRequest:
     type: object
     properties:
@@ -239,18 +297,11 @@ definitions:
         type: string
       password:
         type: string
-  UserResponse:
+  UserCoreResponse:
     type: object
     properties:
-      uuid:
+      username:
         type: string
-        example: 99998888-7777-6666-5555-111122223333
-      created:
-        type: number
-        description: timestamp in milliseconds
-      updated:
-        type: number
-        description: timestamp in milliseconds
       firstName:
         type: string
       lastName:
@@ -258,8 +309,46 @@ definitions:
       displayName:
         type: string
         description: concatenated first and last name, or else username if those are empty
-      email:
-        type: string
+
+  UserResponse:
+    allOf:
+    - $ref: '#/definitions/BaseObject'
+    - $ref: '#/definitions/UserCoreResponse'
+    - type: object
+      properties:
+        joinedTeams:
+          type: array
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                example: 99998888-7777-6666-5555-111122223333
+              created:
+                type: number
+                description: timestamp in milliseconds
+              updated:
+                type: number
+                description: timestamp in milliseconds
+              name:
+                type: string
+        managedTeams:
+          type: array
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                example: 99998888-7777-6666-5555-111122223333
+              created:
+                type: number
+                description: timestamp in milliseconds
+              updated:
+                type: number
+                description: timestamp in milliseconds
+              name:
+                type: string
+
   AuthenticationResponse:
     type: object
     properties:
@@ -269,37 +358,54 @@ definitions:
       user:
         $ref: '#/definitions/UserResponse'
   TeamResponse:
+    allOf:
+      - $ref: '#/definitions/BaseObject'
+      - type: object
+        properties:
+          name:
+            type: string
+          manager:
+            $ref: '#/definitions/UserCoreResponse'
+          roster:
+            type: array
+            items:
+              $ref: '#/definitions/RosterEntryResponse'
+  RosterEntryResponse:
+    allOf:
+      - $ref: '#/definitions/BaseObject'
+      - type: object
+        properties:
+          fieldPosition:
+            type: string
+            enum:
+              - catcher
+              - first_base
+              - second_base
+              - short_stop
+              - pitcher
+              - infield
+              - outfield
+              - left_field
+              - left_centerfield
+              - centerfield
+              - right_centerfield
+              - right_field
+              - rover
+          battingPosition:
+            type: number
+          user:
+            $ref: '#/definitions/UserCoreResponse'
+  RosterEntryRequest:
     type: object
     properties:
-      uuid:
+      firstName:
         type: string
-        example: 99998888-7777-6666-5555-111122223333
-      created:
-        type: number
-        description: timestamp in milliseconds
-      updated:
-        type: number
-        description: timestamp in milliseconds
-      name:
+      lastName:
         type: string
-      manager:
-        $ref: '#/definitions/UserResponse'
-      roster:
-        type: array
-        items:
-          $ref: '#/definitions/RosterEntry'
-  RosterEntry:
-    type: object
-    properties:
-      uuid:
+      teamUuid:
         type: string
-        example: 99998888-7777-6666-5555-111122223333
-      created:
+      battingPosition:
         type: number
-        description: timestamp in milliseconds
-      updated:
-        type: number
-        description: timestamp in milliseconds
       fieldPosition:
         type: string
         enum:
@@ -316,15 +422,3 @@ definitions:
           - right_centerfield
           - right_field
           - rover
-      battingPosition:
-        type: number
-      user:
-        $ref: '#/definitions/UserResponse'
-
-
-
-
-
-
-
-
