@@ -64,23 +64,23 @@ open class DefaultTeamService : AbstractService(), TeamService {
 
         val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
 
-        for (rosterEntry in rosterRepository.findByTeamId(team.id)) {
+        rosterRepository.findByTeamId(team.id).forEach({
 
-            val numberOfTeams = rosterRepository.findByUserId(rosterEntry.user!!.id).size
+            it.removed = true
+            rosterRepository.save(it)
 
-            rosterEntry.removed = true
-            rosterRepository.save(rosterEntry)
+            // todo Remove unclaimed user accounts with no other teams
+        })
 
-            if (numberOfTeams <= 1) {
-                rosterEntry.user!!.removed = true
-                userRepository.save<User>(rosterEntry.user)
-                // TODO use user service isntead
-            }
-
-        }
         team.removed = true
         teamRepository.save(team)
+    }
 
-
+    override fun updateTeam(user: User, teamUuid: String, name: String?): Team {
+        val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
+        if (!name.isNullOrBlank()) {
+            team.name = name
+        }
+        return teamRepository.save(team)
     }
 }

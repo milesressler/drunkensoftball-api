@@ -15,6 +15,10 @@ interface TeamService {
     fun getTeam(user: User,
                 teamUuid: String): Team
 
+    fun updateTeam(user: User,
+                   teamUuid: String,
+                   name: String?): Team
+
     fun deleteTeam(user: User,
                    teamUuid: String)
 }

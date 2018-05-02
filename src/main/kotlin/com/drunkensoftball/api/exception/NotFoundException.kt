@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.http.HttpStatus.NOT_FOUND
 
 @ResponseStatus(NOT_FOUND)
-class NotFoundException : RuntimeException {
+class NotFoundException : BaseDSException {
 
     constructor(message: String) : super(message) {}
 

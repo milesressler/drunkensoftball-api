@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.validation.Errors
 
 @ResponseStatus(BAD_REQUEST)
-class RequestValidationException : RuntimeException {
+class RequestValidationException : BaseDSException {
 
     constructor(errors: Errors) : super("Invalid Parameters: " + errors.allErrors.map { it.defaultMessage }.joinToString()) { }
 

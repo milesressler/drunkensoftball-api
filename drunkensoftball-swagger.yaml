@@ -103,7 +103,7 @@ paths:
           description: Team data
           required: true
           schema:
-            $ref: '#/definitions/CreateTeamRequest'
+            $ref: '#/definitions/TeamRequest'
       responses:
         '200':
           description: >-
@@ -156,13 +156,65 @@ paths:
             $ref: '#/definitions/TeamResponse'
       security:
         - api_key: []
+    put:
+      tags:
+        - TEAM
+      summary: Update team
+      description: >
+              Update team by uuid
+      operationId: updateTeam
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: Team UUID
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Team data
+          required: true
+          schema:
+            $ref: '#/definitions/TeamRequest'
+      responses:
+        '200':
+          description: >-
+          schema:
+            $ref: '#/definitions/TeamResponse'
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - TEAM
+      summary: Delete team
+      description: >
+              Delete team by uuid
+      operationId: deleteTeam
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: Team UUID
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successfully removed
+      security:
+        - api_key: []
 securityDefinitions:
   api_key:
     type: apiKey
     name: Authorization
     in: header
 definitions:
-  CreateTeamRequest:
+  TeamRequest:
     type: object
     properties:
       name:
