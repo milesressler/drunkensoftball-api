@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.team.service
 
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.roster.repo.RosterRepository
 import com.drunkensoftball.api.service.AbstractService
@@ -27,10 +28,9 @@ open class DefaultTeamService : AbstractService(), TeamService {
     @Autowired
     lateinit var userRepository: UserRepository
 
-    override fun createTeam(token: String,
+    override fun createTeam(user: User,
                             name: String): Team {
 
-        val user = mustExist(authenticationRepository.findByToken(token)).user
         val team = Team()
         team.name = name
         team.manager = user
@@ -46,26 +46,23 @@ open class DefaultTeamService : AbstractService(), TeamService {
         return teamRepository.save(team)
     }
 
-    override fun getTeams(token: String,
+    override fun getTeams(user: User,
                           pageable: Pageable): List<Team> {
 
-        val manager = mustExist(authenticationRepository.findByToken(token)).user
-        return teamRepository.findByManagerId(manager!!.id, pageable)
+        return teamRepository.findByManagerId(user.id, pageable)
     }
 
-    override fun getTeam(token: String,
+    override fun getTeam(user: User,
                          teamUuid: String): Team {
 
-        val manager = mustExist(authenticationRepository.findByToken(token)).user
-        return mustExist(teamRepository.findByUuidAndManagerId(teamUuid, manager!!.id))
+        return mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
     }
 
     @Transactional(rollbackFor = [Throwable::class])
-    override fun deleteTeam(token: String,
+    override fun deleteTeam(user: User,
                             teamUuid: String) {
 
-        val manager = mustExist(authenticationRepository.findByToken(token)).user
-        val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, manager!!.id))
+        val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
 
         for (rosterEntry in rosterRepository.findByTeamId(team.id)) {
 

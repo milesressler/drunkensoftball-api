@@ -1,21 +1,20 @@
 package com.drunkensoftball.api.team.service
 
 import com.drunkensoftball.api.team.domain.Team
+import com.drunkensoftball.api.user.domain.User
 import org.springframework.data.domain.Pageable
-import org.springframework.validation.annotation.Validated
 
-@Validated
 interface TeamService {
 
-    fun createTeam(token: String,
+    fun createTeam(user: User,
                    name: String): Team
 
-    fun getTeams(token: String,
+    fun getTeams(user: User,
                  pageable: Pageable): List<Team>
 
-    fun getTeam(token: String,
+    fun getTeam(user: User,
                 teamUuid: String): Team
 
-    fun deleteTeam(token: String,
+    fun deleteTeam(user: User,
                    teamUuid: String)
 }

@@ -1,7 +1,7 @@
 package com.drunkensoftball.api.auth.service
 
 
-import com.drunkensoftball.api.auth.domain.Authentication
+import com.drunkensoftball.api.auth.domain.AuthenticationEntity
 import com.drunkensoftball.api.auth.domain.BasicAuthentication
 import com.drunkensoftball.api.auth.domain.GoogleAuthentication
 import com.drunkensoftball.api.auth.repo.AuthenticationRepository
@@ -49,14 +49,14 @@ open class DefaultAuthenticationService : AuthenticationService {
 
     override fun getUserFromToken(token: String): User {
         val authentication = authenticationRepository.findByToken(token)
-        if (authentication.user == null) {
+        if (authentication?.user == null) {
             throw NotFoundException("User not found")
         } else {
             return authentication.user!!
         }
     }
 
-    override fun loginWithBasicAuthentication(user: String, password: String): Authentication {
+    override fun loginWithBasicAuthentication(user: String, password: String): AuthenticationEntity {
         val userEntity = userRepository.findFirstByUsernameOrEmail(user, user).orElseThrow({ NotFoundException("User not found") })
         val basicAuthentication = userEntity.basicAuthentication
         if (basicAuthentication == null) {
@@ -64,7 +64,7 @@ open class DefaultAuthenticationService : AuthenticationService {
         } else if (!isPasswordValid(basicAuthentication.passwordHash!!, password)) {
             throw NotFoundException("User not found")
         } else {
-            val authentication = Authentication()
+            val authentication = AuthenticationEntity()
             authentication.token = UUID.randomUUID().toString()
             authentication.user = userEntity
             return authenticationRepository.save(authentication)
@@ -72,7 +72,7 @@ open class DefaultAuthenticationService : AuthenticationService {
     }
 
     @Transactional
-    override fun createNewUserBasicAuthentication(username: String, password: String, email: String, firstName: String?, lastName: String?): Authentication {
+    override fun createNewUserBasicAuthentication(username: String, password: String, email: String, firstName: String?, lastName: String?): AuthenticationEntity {
         userRepository.findFirstByUsernameOrEmail(username, email).ifPresent {
             val entity = if(it.email == email) "Email" else "Username"
             throw NonUniqueException("$entity already exists")
@@ -93,7 +93,7 @@ open class DefaultAuthenticationService : AuthenticationService {
         basicAuthentication.passwordHash = hashPassword(password)
         basicAuthenticationRepository.save(basicAuthentication)
 
-        val authentication = Authentication()
+        val authentication = AuthenticationEntity()
         authentication.token = UUID.randomUUID().toString()
         authentication.user = user
         return authenticationRepository.save(authentication)
@@ -107,7 +107,7 @@ open class DefaultAuthenticationService : AuthenticationService {
         return bCryptPasswordEncoder.matches(providedPassword, encryptedPassword)
     }
 
-    override fun googleAuthentication(googleToken: String): Authentication {
+    override fun googleAuthentication(googleToken: String): AuthenticationEntity {
         val idToken = getGoogleIdToken(googleToken)
 
         if (idToken == null) {
@@ -131,9 +131,9 @@ open class DefaultAuthenticationService : AuthenticationService {
                 googleAuthenticationRepository.save(googleAuthentication)
             }).user
 
-            val authentication = Authentication()
+            val authentication = AuthenticationEntity()
             authentication.token = UUID.randomUUID().toString()
-            authentication.user = user
+            authentication.user = user!!
             return authenticationRepository.save(authentication)
         }
     }

@@ -24,7 +24,7 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'http://api.drunkensoftball.miles-smiles.us/auth/google');
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.setRequestHeader('Authorization', id_token);
+        xhr.setRequestHeader('X-Google-Authorization', id_token);
         xhr.onload = function() {
             console.log('Signed in as: ' + xhr.responseText);
         };

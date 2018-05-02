@@ -1,6 +1,5 @@
 package com.drunkensoftball.api.config
 
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -15,7 +14,7 @@ import org.springframework.jndi.JndiTemplate
 import javax.sql.DataSource
 
 @Configuration
-@ComponentScan(basePackages = arrayOf("com.drunkensoftball.api"))
+@ComponentScan(basePackages = ["com.drunkensoftball.api"])
 @PropertySource(value = ["classpath:drunken-softball-application.properties", "classpath:drunken-softball-datasource.properties"])
 @EnableAutoConfiguration
 open class DrunkenConfig {

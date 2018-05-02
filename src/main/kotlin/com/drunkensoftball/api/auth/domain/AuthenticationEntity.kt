@@ -10,12 +10,12 @@ import javax.persistence.*
 @Entity
 @Table(name = "authentication")
 @JsonSerialize(using = AuthenticationSerializer::class)
-class Authentication : BaseEntity() {
+class AuthenticationEntity : BaseEntity() {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user", nullable = false)
-    var user: User? = null
+    lateinit var user: User
 
-    @Column(name = "token", nullable = false)
-    var token: String? = null
+    @Column(name = "token", nullable = false, unique = true)
+    var token: String = ""
 }

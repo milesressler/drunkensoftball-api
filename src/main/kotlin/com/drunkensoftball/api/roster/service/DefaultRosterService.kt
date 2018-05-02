@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.roster.service
 
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.roster.domain.FieldPosition
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.roster.repo.RosterRepository
@@ -24,7 +25,7 @@ class DefaultRosterService : AbstractService(), RosterService {
     @Autowired
     lateinit var userService: UserService
 
-    override fun addPlayerByUuid(token: String,
+    override fun addPlayerByUuid(authentication: DSAuthentication,
                                  teamUuid: String,
                                  playerUuid: String,
                                  battingPosition: Int?,
@@ -32,15 +33,15 @@ class DefaultRosterService : AbstractService(), RosterService {
         return RosterEntry()
     }
 
-    override fun addGuestPlayer(token: String,
+    override fun addGuestPlayer(authentication: DSAuthentication,
                        teamUuid: String,
                        firstName: String,
                        lastName: String?,
                        battingPosition: Int?,
                        fieldPositionString: String?): RosterEntry {
 
-        val user = getUserFromToken(token)
-        val team = teamRepository.findByUuidAndManagerId(teamUuid, user.id)
+        val user = authentication.authenticationEntity?.user
+        val team = teamRepository.findByUuidAndManagerId(teamUuid, user?.id)
         //        final User guestPlayer = userService.createUser(StringUtils.delete(UUID.randomUUID().toString(), "-" ), displayName, null);
         val guestPlayer: User? = null
 

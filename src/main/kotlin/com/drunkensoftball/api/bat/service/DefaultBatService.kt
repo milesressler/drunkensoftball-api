@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.bat.service
 
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.bat.domain.AtBat
 import com.drunkensoftball.api.bat.domain.AtBatResult
 import com.drunkensoftball.api.bat.repo.AtBatRepository
@@ -25,13 +26,13 @@ class DefaultBatService : AbstractService(), BatService {
     @Autowired
     lateinit var atBatRepository: AtBatRepository
 
-    override fun addPlays(token: String,
+    override fun addPlays(authentication: DSAuthentication,
                           gameUuid: String,
                           rosterUuid: String,
                           atBatResultString: String,
                           uniqueId: String): AtBat {
 
-        val user = getUserFromToken(token)
+        val user = authentication.authenticationEntity?.user
 
         // todo ownership validations
 

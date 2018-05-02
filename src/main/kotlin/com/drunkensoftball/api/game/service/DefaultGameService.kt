@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.game.service
 
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.game.domain.Game
 import com.drunkensoftball.api.game.repo.GameRepository
 import com.drunkensoftball.api.service.AbstractService
@@ -17,11 +18,11 @@ class DefaultGameService : AbstractService(), GameService {
     @Autowired
     lateinit var teamRepository: TeamRepository
 
-    override fun createGame(token: String,
+    override fun createGame(authentication: DSAuthentication,
                             teamUuid: String): Game {
 
-        val user = getUserFromToken(token)
-        val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
+        val user = authentication.authenticationEntity?.user
+        val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user?.id))
 
         val game = Game()
         game.team = team

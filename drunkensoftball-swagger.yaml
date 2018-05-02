@@ -75,7 +75,7 @@ paths:
         - application/json
       parameters:
         - in: header
-          name: Authorization
+          name: X-Google-Authorization
           type: string
           required: true
           description: Google JWT

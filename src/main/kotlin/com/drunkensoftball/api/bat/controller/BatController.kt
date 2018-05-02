@@ -1,10 +1,12 @@
 package com.drunkensoftball.api.bat.controller
 
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.bat.domain.AtBat
 import com.drunkensoftball.api.bat.domain.BatRequest
 import com.drunkensoftball.api.bat.service.BatService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.POST
 
@@ -20,10 +22,10 @@ class BatController {
     //    }
 
     @RequestMapping(value = [URL_BAT], method = [POST])
-    fun batBulkUpload(@RequestHeader(name = "Authorization") token: String, @RequestBody(required = true) batRequestList: List<BatRequest>): Int? {
+    fun batBulkUpload(@AuthenticationPrincipal authentication: DSAuthentication, @RequestBody(required = true) batRequestList: List<BatRequest>): Int? {
         var resultsAdded = 0
         for (batRequest in batRequestList) {
-            batService.addPlays(token, batRequest.gameUuid, batRequest.rosterUuid, batRequest.atBatResult, batRequest.uniqueId)
+            batService.addPlays(authentication, batRequest.gameUuid, batRequest.rosterUuid, batRequest.atBatResult, batRequest.uniqueId)
             resultsAdded += 1
         }
         return resultsAdded

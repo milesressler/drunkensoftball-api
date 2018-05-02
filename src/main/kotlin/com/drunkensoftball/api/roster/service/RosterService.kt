@@ -1,17 +1,18 @@
 package com.drunkensoftball.api.roster.service
 
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.roster.domain.RosterEntry
 
 interface RosterService {
 
-    fun addPlayerByUuid(token: String,
+    fun addPlayerByUuid(authentication: DSAuthentication,
                         teamUuid: String,
                         playerUuid: String,
                         battingPosition: Int?,
                         fieldPosition: String?): RosterEntry
 
-    fun addGuestPlayer(token: String,
+    fun addGuestPlayer(authentication: DSAuthentication,
                        teamUuid: String,
                        firstName: String,
                        lastName: String?,

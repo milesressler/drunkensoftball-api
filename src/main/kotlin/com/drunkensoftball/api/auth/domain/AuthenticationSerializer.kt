@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.SerializerProvider
 
 import java.io.IOException
 
-class AuthenticationSerializer : BaseEntitySerializer<Authentication>() {
+class AuthenticationSerializer : BaseEntitySerializer<AuthenticationEntity>() {
 
 
     @Throws(IOException::class)
-    override fun serialize(entity: Authentication,
+    override fun serialize(entity: AuthenticationEntity,
                            jsonGenerator: JsonGenerator,
                            provider: SerializerProvider) {
 

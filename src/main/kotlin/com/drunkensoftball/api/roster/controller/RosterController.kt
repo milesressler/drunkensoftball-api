@@ -1,9 +1,11 @@
 package com.drunkensoftball.api.roster.controller
 
+import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.roster.domain.RosterRequest
 import com.drunkensoftball.api.roster.service.RosterService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.POST
 
@@ -14,9 +16,9 @@ class RosterController {
     lateinit var rosterService: RosterService
 
     @RequestMapping(value = [URL_ROSTER], method = [POST])
-    fun addPlayer(@RequestHeader(name = "Authorization") token: String, @RequestBody rosterRequest: RosterRequest): RosterEntry {
+    fun addPlayer(@AuthenticationPrincipal authentication: DSAuthentication, @RequestBody rosterRequest: RosterRequest): RosterEntry {
 
-        return rosterService.addGuestPlayer(token,
+        return rosterService.addGuestPlayer(authentication,
                 rosterRequest.teamUuid,
                 rosterRequest.firstName,
                 rosterRequest.lastName,

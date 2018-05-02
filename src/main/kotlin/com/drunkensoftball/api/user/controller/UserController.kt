@@ -1,7 +1,7 @@
 package com.drunkensoftball.api.user.controller
 
 
-import com.drunkensoftball.api.auth.domain.Authentication
+import com.drunkensoftball.api.auth.domain.AuthenticationEntity
 import com.drunkensoftball.api.auth.service.AuthenticationService
 import com.drunkensoftball.api.exception.RequestValidationException
 import com.drunkensoftball.api.user.domain.UserRequest
@@ -26,7 +26,7 @@ class UserController {
 
     @RequestMapping(value = [URL_USER], method = [(RequestMethod.POST)], produces = [(MediaType.APPLICATION_JSON_VALUE)])
     fun createUser(@Valid @RequestBody userRequest: UserRequest,
-                   errors: Errors): Authentication {
+                   errors: Errors): AuthenticationEntity {
         if (errors.hasErrors()) { throw RequestValidationException(errors) }
         return authenticationService.createNewUserBasicAuthentication(userRequest.username, userRequest.password, userRequest.email, userRequest.firstName, userRequest.lastName)
     }
