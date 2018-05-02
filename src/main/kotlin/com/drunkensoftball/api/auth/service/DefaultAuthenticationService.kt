@@ -7,6 +7,7 @@ import com.drunkensoftball.api.auth.domain.GoogleAuthentication
 import com.drunkensoftball.api.auth.repo.AuthenticationRepository
 import com.drunkensoftball.api.auth.repo.BasicAuthenticationRepository
 import com.drunkensoftball.api.auth.repo.GoogleAuthenticationRepository
+import com.drunkensoftball.api.communications.service.CommunicationsService
 import com.drunkensoftball.api.exception.BadGatewayException
 import com.drunkensoftball.api.exception.NonUniqueException
 import com.drunkensoftball.api.exception.NotFoundException
@@ -41,6 +42,9 @@ open class DefaultAuthenticationService : AuthenticationService {
 
     @Autowired
     lateinit var userRepository: UserRepository
+
+    @Autowired
+    lateinit var communicationsService: CommunicationsService
 
     private val rnd = SecureRandom()
 
@@ -95,6 +99,8 @@ open class DefaultAuthenticationService : AuthenticationService {
         basicAuthentication.passwordHash = hashPassword(password)
         basicAuthenticationRepository.save(basicAuthentication)
 
+//        communicationsService.sendEmail("Thanks for signing up with Drunken Softball!\n\nSincerely,\nDrunken Softball Team", "Welcome!", email, "accounts@miles-smiles.us", "Drunken Softball Accounts")
+
         val authentication = AuthenticationEntity()
         authentication.token = createToken()
         authentication.user = user
@@ -128,8 +134,8 @@ open class DefaultAuthenticationService : AuthenticationService {
 
             val user = googleAuthenticationRepository.findByGoogleId(userId).orElseGet({
                 val user = User()
-                user.firstName = payload["given_name"] as String
-                user.lastName = payload["family_name"] as String
+                user.firstName = payload["given_name"] as String?
+                user.lastName = payload["family_name"] as String?
                 user.email = payload.email
                 user.verified = payload.emailVerified
                 user.username = user.firstName?.trim() + user.lastName?.trim() + System.currentTimeMillis() / 1000
