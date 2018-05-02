@@ -42,9 +42,9 @@ class DefaultRosterService : AbstractService(), RosterService {
         val team = mustExist(teamRepository.findByUuidAndManagerId(teamUuid, user.id))
 
         var guestPlayer = User()
-        guestPlayer.firstName = firstName
-        guestPlayer.lastName = lastName
-        guestPlayer.username = "${firstName.toLowerCase()}.${lastName?.toLowerCase() ?: ""}${System.currentTimeMillis() / 1000}"
+        guestPlayer.firstName = firstName.trim()
+        guestPlayer.lastName = lastName?.trim()
+        guestPlayer.username = "${firstName.trim().toLowerCase()}.${lastName?.trim()?.toLowerCase() ?: ""}${System.currentTimeMillis() / 1000}"
         guestPlayer.verified = false
         guestPlayer = userRepository.save(guestPlayer)
 

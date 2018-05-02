@@ -2,6 +2,7 @@ package com.drunkensoftball.api.team.domain
 
 
 import com.drunkensoftball.api.domain.BaseEntity
+import com.drunkensoftball.api.game.domain.Game
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.user.domain.User
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
@@ -21,6 +22,9 @@ class Team : BaseEntity() {
     @JoinColumn(name = "manager")
     var manager: User? = null
 
-    @OneToMany(mappedBy = "team", cascade = arrayOf(CascadeType.ALL))
-    var players: MutableList<RosterEntry>? = null
+    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    var roster: MutableList<RosterEntry>? = null
+
+    @OneToMany(mappedBy = "team", cascade = [CascadeType.ALL])
+    var games: MutableList<Game>? = null
 }

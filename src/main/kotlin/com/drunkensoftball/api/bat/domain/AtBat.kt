@@ -24,4 +24,7 @@ class AtBat : BaseEntity() {
 
     @Column(name = "result")
     var atBatResult: AtBatResult? = null
+
+    @Column(name = "rbis")
+    var rbis: Int = 0
 }

@@ -1,14 +1,15 @@
 package com.drunkensoftball.api.bat.service
 
-import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.bat.domain.AtBat
+import com.drunkensoftball.api.user.domain.User
 
 interface BatService {
 
-    fun addPlays(authentication: DSAuthentication,
+    fun addPlays(user: User,
                  gameUuid: String,
                  rosterUuid: String,
                  atBatResultString: String,
-                 uniqueId: String): AtBat
+                 uniqueId: String,
+                 rbis: Int): Int
 
 }

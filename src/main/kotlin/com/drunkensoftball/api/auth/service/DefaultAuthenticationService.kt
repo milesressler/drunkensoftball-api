@@ -84,8 +84,8 @@ open class DefaultAuthenticationService : AuthenticationService {
 
         var user = User()
         user.username = username
-        user.firstName = firstName
-        user.lastName = lastName
+        user.firstName = firstName?.trim()
+        user.lastName = lastName?.trim()
         user.verified = false
         user.email = email
         user = userRepository.save(user)
@@ -132,7 +132,7 @@ open class DefaultAuthenticationService : AuthenticationService {
                 user.lastName = payload["family_name"] as String
                 user.email = payload.email
                 user.verified = payload.emailVerified
-                user.username = user.firstName + user.lastName + System.currentTimeMillis() / 1000
+                user.username = user.firstName?.trim() + user.lastName?.trim() + System.currentTimeMillis() / 1000
                 userRepository.save(user)
 
                 val googleAuthentication = GoogleAuthentication()

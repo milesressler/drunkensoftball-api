@@ -29,7 +29,7 @@ class TeamSerializer : BaseEntitySerializer<Team>() {
         jsonGenerator.writeEndObject()
 
         jsonGenerator.writeArrayFieldStart(BaseEntitySerializer.ROSTER)
-            entity.players?.forEach {
+            entity.roster?.forEach {
                 jsonGenerator.writeStartObject()
                 writeAbstractEntityFields(it, jsonGenerator)
                 jsonGenerator.writeObjectField(BaseEntitySerializer.FIELD_POSITION, it.fieldPosition?.name)
@@ -44,6 +44,18 @@ class TeamSerializer : BaseEntitySerializer<Team>() {
                 jsonGenerator.writeEndObject()
             }
         jsonGenerator.writeEndArray()
+
+
+        jsonGenerator.writeArrayFieldStart(BaseEntitySerializer.GAMES)
+            entity.games?.forEach {
+                jsonGenerator.writeStartObject()
+                writeAbstractEntityFields(it, jsonGenerator)
+                jsonGenerator.writeObjectField(OPPONENT_NAME, it.opponentName)
+                jsonGenerator.writeEndObject()
+            }
+        jsonGenerator.writeEndArray()
+
+
 
         // End User
         jsonGenerator.writeEndObject()

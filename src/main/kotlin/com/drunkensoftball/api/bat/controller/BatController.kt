@@ -1,14 +1,15 @@
 package com.drunkensoftball.api.bat.controller
 
 
-import com.drunkensoftball.api.auth.domain.DSAuthentication
-import com.drunkensoftball.api.bat.domain.AtBat
 import com.drunkensoftball.api.bat.domain.BatRequest
 import com.drunkensoftball.api.bat.service.BatService
+import com.drunkensoftball.api.user.domain.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod.POST
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class BatController {
@@ -16,19 +17,16 @@ class BatController {
     @Autowired
     lateinit var batService: BatService
 
-    //    @RequestMapping(value = URL_BAT, method = RequestMethod.POST)
-    //    public String batUpload(@RequestHeader(name = "Authorization") final String token, @RequestBody final BatRequest batRequest) {
-    //        return batService.addPlays(token, batRequest.getGameUuid(), batRequest.getRosterUuid(), batRequest.getAtBatResult(), batRequest.getUniqueId()).getUuid();
-    //    }
-
     @RequestMapping(value = [URL_BAT], method = [POST])
-    fun batBulkUpload(@AuthenticationPrincipal authentication: DSAuthentication, @RequestBody(required = true) batRequestList: List<BatRequest>): Int? {
+    fun batBulkUpload(@AuthenticationPrincipal user: User, @RequestBody(required = true) batRequestList: List<BatRequest>): Any? {
         var resultsAdded = 0
+        var resultsProcessed = 0
+
         for (batRequest in batRequestList) {
-            batService.addPlays(authentication, batRequest.gameUuid, batRequest.rosterUuid, batRequest.atBatResult, batRequest.uniqueId)
-            resultsAdded += 1
+            resultsAdded += batService.addPlays(user, batRequest.gameUuid, batRequest.rosterUuid, batRequest.atBatResult, batRequest.uniqueId, batRequest.rbis)
+            resultsProcessed += 1
         }
-        return resultsAdded
+        return mapOf("newCount" to resultsAdded, "processedCount" to resultsProcessed)
     }
 
     companion object {

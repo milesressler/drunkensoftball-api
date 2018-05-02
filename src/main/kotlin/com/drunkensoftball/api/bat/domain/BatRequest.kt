@@ -2,8 +2,9 @@ package com.drunkensoftball.api.bat.domain
 
 class BatRequest {
 
-    val gameUuid: String = ""
-    val rosterUuid: String = ""
-    val atBatResult: String = ""
-    val uniqueId: String = ""
+    var gameUuid: String = ""
+    var rosterUuid: String = ""
+    var atBatResult: String = ""
+    var uniqueId: String = ""
+    var rbis: Int = 0
 }

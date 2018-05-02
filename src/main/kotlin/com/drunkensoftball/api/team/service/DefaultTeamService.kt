@@ -1,7 +1,6 @@
 package com.drunkensoftball.api.team.service
 
 
-import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.roster.repo.RosterRepository
 import com.drunkensoftball.api.service.AbstractService
@@ -41,7 +40,7 @@ open class DefaultTeamService : AbstractService(), TeamService {
 
         val playerList = LinkedList<RosterEntry>()
         playerList.add(rosterEntry)
-        team.players = playerList
+        team.roster = playerList
 
         return teamRepository.save(team)
     }

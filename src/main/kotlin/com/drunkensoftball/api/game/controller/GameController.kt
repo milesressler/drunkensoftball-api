@@ -1,9 +1,9 @@
 package com.drunkensoftball.api.game.controller
 
-import com.drunkensoftball.api.auth.domain.DSAuthentication
 import com.drunkensoftball.api.game.domain.Game
 import com.drunkensoftball.api.game.domain.GameRequest
 import com.drunkensoftball.api.game.service.GameService
+import com.drunkensoftball.api.user.domain.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -17,8 +17,8 @@ class GameController {
     lateinit var gameService: GameService
 
     @RequestMapping(value = [URL_GAME], method = [POST])
-    fun createGame(@AuthenticationPrincipal authentication: DSAuthentication, @RequestBody gameRequest: GameRequest): Game {
-        return gameService.createGame(authentication, gameRequest.teamUuid)
+    fun createGame(@AuthenticationPrincipal user: User, @RequestBody request: GameRequest): Game {
+        return gameService.createGame(user, request.teamUuid, request.opponentName)
     }
 
 

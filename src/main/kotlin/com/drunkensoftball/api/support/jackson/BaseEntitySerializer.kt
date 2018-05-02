@@ -64,6 +64,8 @@ open class BaseEntitySerializer<T : BaseEntity> : JsonSerializer<T>() {
         const val NAME = "name"
         const val MANAGER = "manager"
         const val ROSTER = "roster"
+        const val GAMES = "games"
+        const val OPPONENT_NAME = "opponentName"
         const val BATTING_POSITION = "battingPosition"
         const val FIELD_POSITION = "fieldPosition"
     }
