@@ -290,7 +290,7 @@ paths:
       summary: Create/Update Bat results
       description: >
               Uploads a list of at-bat results.  Creates new if it doesn't exists, or updates if it does.
-      operationId: createGame
+      operationId: createBattingResults
       produces:
         - application/json
       parameters:
