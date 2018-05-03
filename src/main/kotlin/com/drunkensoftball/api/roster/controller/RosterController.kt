@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.roster.controller
 
 import com.drunkensoftball.api.auth.domain.DSAuthentication
+import com.drunkensoftball.api.auth.service.AuthenticationRequired
 import com.drunkensoftball.api.roster.domain.RosterEntry
 import com.drunkensoftball.api.roster.domain.RosterRequest
 import com.drunkensoftball.api.roster.service.RosterService
@@ -16,6 +17,7 @@ class RosterController {
     @Autowired
     lateinit var rosterService: RosterService
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_ROSTER], method = [POST])
     fun addPlayer(@AuthenticationPrincipal user: User,
                   @RequestBody rosterRequest: RosterRequest): RosterEntry {

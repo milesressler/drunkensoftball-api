@@ -1,6 +1,7 @@
 package com.drunkensoftball.api.bat.controller
 
 
+import com.drunkensoftball.api.auth.service.AuthenticationRequired
 import com.drunkensoftball.api.bat.domain.BatRequest
 import com.drunkensoftball.api.bat.service.BatService
 import com.drunkensoftball.api.user.domain.User
@@ -17,6 +18,7 @@ class BatController {
     @Autowired
     lateinit var batService: BatService
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_BAT], method = [POST])
     fun batBulkUpload(@AuthenticationPrincipal user: User, @RequestBody(required = true) batRequestList: List<BatRequest>): Any? {
         var resultsAdded = 0

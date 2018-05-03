@@ -2,6 +2,7 @@ package com.drunkensoftball.api.team.controller
 
 
 import com.drunkensoftball.api.auth.domain.DSAuthentication
+import com.drunkensoftball.api.auth.service.AuthenticationRequired
 import com.drunkensoftball.api.team.domain.Team
 import com.drunkensoftball.api.team.domain.CreateTeamRequest
 import com.drunkensoftball.api.team.service.TeamService
@@ -18,12 +19,14 @@ class TeamController {
     @Autowired
     lateinit var teamService: TeamService
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_TEAM], method = [POST])
     fun createTeam(@AuthenticationPrincipal user: User,
                    @RequestBody createTeamRequest: CreateTeamRequest): Team {
         return teamService.createTeam(user, createTeamRequest.name)
     }
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_TEAM], method = [PUT])
     fun updateTeam(@AuthenticationPrincipal user: User,
                    @RequestBody request: CreateTeamRequest,
@@ -31,6 +34,7 @@ class TeamController {
         return teamService.updateTeam(user, teamUuid, request.name)
     }
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_TEAM], method = [GET])
     fun getTeams(@AuthenticationPrincipal user: User,
                  pageable: Pageable): List<Team> {
@@ -38,6 +42,7 @@ class TeamController {
         return teamService.getTeams(user, pageable)
     }
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_TEAM_UUID], method = [GET])
     fun getTeam(@AuthenticationPrincipal user: User,
                 @PathVariable(value = UUID) teamUuid: String): Team {
@@ -45,6 +50,7 @@ class TeamController {
         return teamService.getTeam(user, teamUuid)
     }
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_TEAM_UUID], method = [DELETE])
     fun deleteTeam(@AuthenticationPrincipal user: User,
                    @PathVariable(value = UUID) teamUuid: String) {

@@ -2,6 +2,7 @@ package com.drunkensoftball.api.user.controller
 
 
 import com.drunkensoftball.api.auth.domain.AuthenticationEntity
+import com.drunkensoftball.api.auth.service.AuthenticationRequired
 import com.drunkensoftball.api.auth.service.AuthenticationService
 import com.drunkensoftball.api.exception.RequestValidationException
 import com.drunkensoftball.api.user.domain.User
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 import javax.validation.Valid
 
 @RestController
-class UserController {
+open class UserController {
 
     @Autowired
     lateinit var userService: UserService
@@ -26,6 +27,7 @@ class UserController {
     @Autowired
     lateinit var authenticationService: AuthenticationService
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_USER], method = [(RequestMethod.GET)], produces = [(MediaType.APPLICATION_JSON_VALUE)])
     fun getUser(@AuthenticationPrincipal user: User): User {
         return user

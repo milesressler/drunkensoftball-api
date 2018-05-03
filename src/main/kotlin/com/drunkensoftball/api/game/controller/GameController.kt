@@ -1,5 +1,6 @@
 package com.drunkensoftball.api.game.controller
 
+import com.drunkensoftball.api.auth.service.AuthenticationRequired
 import com.drunkensoftball.api.game.domain.Game
 import com.drunkensoftball.api.game.domain.GameRequest
 import com.drunkensoftball.api.game.service.GameService
@@ -16,12 +17,14 @@ class GameController {
     @Autowired
     lateinit var gameService: GameService
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_GAME], method = [POST])
     fun createGame(@AuthenticationPrincipal user: User, @RequestBody request: GameRequest): Game {
         return gameService.createGame(user, request.teamUuid, request.opponentName)
     }
 
 
+    @AuthenticationRequired
     @RequestMapping(value = [URL_GAME_UUID], method = [PUT])
     fun updateGame(@PathVariable(value = UUID) gameUuid: String) {
 
